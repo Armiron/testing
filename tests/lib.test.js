@@ -29,5 +29,22 @@ describe("absolute", () => {
   });
 });
 
+describe("greet", () => {
+  // Too specific comparison that succombs to simple variation
+  // Have to find the right balance between too specific and too general
+  // it("should return the greeeting message", () => {
+  //   const result = lib.greet("Armiron");
+  //   expect(result).toBe("Welcome Armiron");
+  // });
+
+  // when testing string to make sure theyre not too specific
+  it("should return the greeeting message", () => {
+    const result = lib.greet("Armiron");
+    expect(result).toMatch(/Armiron/); //either one is good
+    //expect(result).toContain("Armiron"); //either one is good
+  });
+
+});
+
 
 

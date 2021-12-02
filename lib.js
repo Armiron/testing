@@ -24,9 +24,16 @@ module.exports.absolute = function(number) {
 
 
 // Testing strings 
+// Starting function with really specific test
+// module.exports.greet = function(name) { 
+//   return 'Welcome ' + name; 
+// }
+
+// Lightly modified function that breaks the specific test
 module.exports.greet = function(name) { 
-  return 'Welcome ' + name; 
+  return 'Welcome ' + name + "!"; 
 }
+
 
 // Testing arrays 
 module.exports.getCurrencies = function() { 
