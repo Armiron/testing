@@ -82,3 +82,52 @@ describe("getProduct", () => {
   });
 });
 
+describe("registerUser", () => {
+  // Normal test the throw path
+  // it("should throw if username is falsy", () => {
+  //   // Falsy values
+  //   // Null
+  //   // undefined
+  //   // NaN
+  //   // ""
+  //   // 0
+  //   // false
+
+  //   // Cant do it this way with exceptions
+  //   // const result = lib.registerUser(null);
+  //   // expect(result).toThrow()
+    
+  //   // Should repeat for each falsy value
+  //   expect(() => { lib.registerUser(null); }).toThrow();
+  // });
+
+  // Parameterized test
+
+  const falsyValues = [ null, undefined, NaN, "", 0, false];
+  it('should throw if username is falsy', () => {
+    falsyValues.forEach(element => {
+      expect(() => { lib.registerUser(element); }).toThrow();
+    });
+  });
+  
+
+  // added in jest
+  it.each([falsyValues])(
+    'should throw if username is falsy',
+    (input) => {
+      expect(() => { lib.registerUser(input); }).toThrow();
+    }
+  );
+
+  // The other no throw path
+  
+  it('should return a user object if valid username is passed', () => {
+    const result = lib.registerUser("Armiron");
+    expect(result).toMatchObject({ username: "Armiron" });
+    expect(result.id).toBeGreaterThan(0);
+  });
+
+
+});
+
+
