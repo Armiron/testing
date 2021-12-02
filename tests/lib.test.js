@@ -10,6 +10,10 @@
 // }
 
 const lib = require("../lib");
+const db = require("../db");
+const mail = require("../mail");
+// No matter how many times u include a module 
+// cs the first time it loads it is in the memory
 
 // Grouping related test in a describe block
 describe("absolute", () => {
@@ -130,4 +134,77 @@ describe("registerUser", () => {
 
 });
 
+describe('applyDiscount', () => {
+  it('should apply 10% discount if customer has more than 10 points', () => {
+    //Fake implementation to do unit testing
+    //Mock function
+    db.getCustomerSync = function (customerId) {
+      console.log("Fake reading customer");
+      return { id: customerId, points:20 };
+    }
 
+    const order = { customerId: 1, totalPrice: 10};
+    lib.applyDiscount(order);
+    expect(order.totalPrice).toBe(9);
+  });
+});
+
+describe('notifyCustomer', () => {
+  it('should send an email to the customer', () => {
+    // JEST Mock Functions
+    // const mockFunction = jest.fn();
+    // mockFunction.mockReturnValue(1); //sets return value of this function
+    // mockFunction.mockResolvedValue(1); //return resolved promise
+    // mockFunction.mockRejectedValue(new Error("...")); //return rejected value
+
+    // const result = await mockFunction();
+
+    db.getCustomerSync = function (customerId) {
+      return { email: "a" };
+    };
+
+    let mailSent = false;
+    mail.send = function (email, message) {
+      mailSent = true;
+    }
+
+    lib.notifyCustomer({ customerId: 1 });
+
+    expect(mailSent).toBe(true);
+  });
+
+  it('should send an email to the customer', () => {
+    // JEST Mock Functions
+    // const mockFunction = jest.fn();
+    // mockFunction.mockReturnValue(1); //sets return value of this function
+    // mockFunction.mockResolvedValue(1); //return resolved promise
+    // mockFunction.mockRejectedValue(new Error("...")); //return rejected value
+
+    // const result = await mockFunction();
+
+    db.getCustomerSync = jest.fn().mockReturnValue({
+      email: "a"
+    });
+    
+    // db.getCustomerSync = function (customerId) {
+    //   return { email: "a" };
+    // };
+
+
+    mail.send = jest.fn();
+
+    // let mailSent = false;
+    // mail.send = function (email, message) {
+    //   mailSent = true;
+    // }
+
+    lib.notifyCustomer({ customerId: 1 });
+
+    expect(mail.send).toHaveBeenCalled();
+    // expect(mail.send).toHaveBeenCalledWith("a", "..."); //works best with not string
+    expect(mail.send.mock.calls[0][0]).toBe("a");
+    expect(mail.send.mock.calls[0][1]).toMatch(/order/);
+    
+  });
+
+});
